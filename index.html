@@ -5,7 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AP Jorge Barradas</title>
     <style>
-        /* Common CSS styles (unchanged) */
+        /* Common CSS styles for the entire site */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        p {
+            font-size: 1rem;
+            line-height: 1.4;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
 
         /* Styles for the contact and social section */
         .contact-social {
@@ -53,16 +99,16 @@
 
         /* Media queries for responsiveness */
         @media screen and (max-width: 768px) {
-            .contact-social h2 {
+            h1 {
                 font-size: 1.2rem;
             }
 
-            .contact-social ul li {
-                font-size: 1rem;
+            p {
+                font-size: 0.9rem;
             }
 
-            .social-icons a {
-                font-size: 1.5rem;
+            .container {
+                padding: 1rem;
             }
         }
     </style>
