@@ -139,11 +139,13 @@
 
         .member {
             margin: 1rem;
+            overflow: hidden; /* Hide overflowing content */
         }
 
         .member img {
             max-width: 150px; /* Make the images 1.5 times bigger */
-            height: auto;
+            height: 150px; /* Set a fixed height */
+            object-fit: cover; /* Crop and fit the image within the container */
             display: block;
             margin: 1rem auto;
             border-radius: 50%; /* Make the images circular */
