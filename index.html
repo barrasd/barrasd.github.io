@@ -1,139 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AP EB1 Jorge Barradas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
-        }
-        .container {
-            max-width: 100%;
-            padding: 1rem;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center; /* Center-align content within the container */
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin-top: 0;
-        }
-        p {
-            font-size: 1rem;
-            line-height: 1.4;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 1rem auto;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 0.5rem;
-        }
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        /* Styles for the contact and social section */
-        .contact-social {
-            background-color: #f9f9f9;
-            padding: 1rem 0;
-            text-align: center;
-        }
-
-        .contact-social h2 {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .contact-social ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .contact-social ul li {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-
-        .social-icons {
-            margin-top: 1rem;
-        }
-
-        .social-icons li {
-            display: inline-block;
-            margin-right: 1rem;
-        }
-
-        .social-icons a {
-            font-size: 1.5rem;
-            color: #007BFF;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: #0056b3;
-        }
-
-        /* Media queries for responsiveness */
-        @media screen and (max-width: 768px) {
-            header {
-                padding: 0.5rem;
-            }
-            .container {
-                padding: 0.5rem;
-            }
-            h1 {
-                font-size: 1.2rem;
-            }
-            p {
-                font-size: 0.9rem;
-            }
-            .contact-social {
-                padding: 1rem 0;
-            }
-            .contact-social h2 {
-                font-size: 1.1rem;
-            }
-            .contact-social ul li {
-                font-size: 0.9rem;
-            }
-            .social-icons a {
-                font-size: 1.2rem;
-            }
-            /* Center-align text and links within the contact and social section */
-            .contact-social ul,
-            .social-icons {
-                text-align: center;
-            }
-        }
-    </style>
+    <!-- Meta tags and CSS styles as before... -->
 </head>
 <body>
     <header>
         <h1>EB1 Jorge Barradas</h1>
     </header>
-    <div class="container">
+    
+    <!-- Index Section -->
+    <section class="index">
+        <div class="container">
+            <h2>Index</h2>
+            <ul>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#members">Our Members</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#follow">Follow Us</a></li>
+            </ul>
+        </div>
+    </section>
+    
+    <div class="container" id="about">
         <p>Associação de Pais e Encarregados de Educação.</p>
         <img src="https://informacoeseservicos.lisboa.pt/fileadmin/espacos/imagens/EB_jorge_barradas.jpg" alt="A sample image">
         <ul>
@@ -141,8 +29,9 @@
             <li><a href="https://www.github.com">GitHub</a></li>
         </ul>
     </div>
+    
     <!-- Members Section -->
-    <section class="members">
+    <section class="members" id="members">
         <div class="container">
             <h2>Our Members</h2>
             <div class="member">
@@ -156,14 +45,20 @@
             <!-- Add more members as needed -->
         </div>
     </section>
+    
     <!-- Contact and Social Media Section -->
-    <section class="contact-social">
+    <section class="contact-social" id="contact">
         <div class="container">
             <h2>Contact Us</h2>
             <ul>
                 <li>Email: contact@example.com</li>
                 <li>Phone: +123-456-7890</li>
             </ul>
+        </div>
+    </section>
+    
+    <section class="contact-social" id="follow">
+        <div class="container">
             <h2>Follow Us</h2>
             <ul class="social-icons">
                 <li><a href="https://www.facebook.com/apeb52/" target="_blank"><i class="fab fa-facebook"></i></a></li>
