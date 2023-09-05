@@ -151,6 +151,19 @@
             color: #555;
             margin-top: 0.5rem;
         }
+
+        /* Styles for the back-to-top link */
+        .back-to-top {
+            display: block;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .back-to-top a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -204,17 +217,17 @@
                 <li>Email: contact@example.com</li>
                 <li>Phone: +123-456-7890</li>
             </ul>
-        </div>
-    </section>
-    
-    <section class="contact-social" id="follow">
-        <div class="container">
             <h2>Follow Us</h2>
-            <ul class="social-icons">
+            <ul class="social-icons" id="follow">
                 <li><a href="https://www.facebook.com/apeb52/" target="_blank"><i class="fab fa-facebook"></i></a></li>
                 <li><a href="https://www.instagram.com/apeb1jorgebarradas/" target="_blank"><i class="fab fa-instagram"></i></a></li>
             </ul>
         </div>
     </section>
+
+    <!-- Back to Top Link -->
+    <div class="back-to-top">
+        <a href="#index">Back to Top</a>
+    </div>
 </body>
 </html>
