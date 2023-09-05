@@ -105,17 +105,12 @@
             z-index: 1;
         }
 
-        .index h2 {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
         .index ul {
             list-style: none;
             padding: 0;
             display: flex;
             justify-content: center;
+            align-items: center; /* Center the items vertically */
         }
 
         .index ul li {
@@ -123,6 +118,7 @@
             color: #555;
             margin: 0 1rem; /* Adjust spacing between items */
             transition: background-color 0.3s; /* Add transition effect for background-color */
+            border-radius: 50%; /* Make the items circular */
         }
 
         .index ul li:hover {
@@ -184,7 +180,6 @@
     <!-- Index Section -->
     <section class="index">
         <div class="container">
-            <h2>Index</h2>
             <ul>
                 <li><a href="#about">About Us</a></li>
                 <li><a href="#members">Our Members</a></li>
