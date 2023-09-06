@@ -95,6 +95,35 @@
             color: #0056b3;
         }
 
+        /* Styles for the index section */
+        .index {
+            background-color: #f9f9f9;
+            padding: 1rem 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .index ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .index ul li {
+            font-size: 1rem;
+            color: #555;
+            margin: 0 1rem; /* Adjust spacing between items */
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .index ul li:hover {
+            color: #007BFF;
+        }
+
         /* Styles for the members section */
         .members {
             background-color: #f9f9f9;
@@ -138,23 +167,6 @@
             text-decoration: none;
             font-size: 1rem;
         }
-
-        /* Styles for the horizontal scrollable section */
-        .horizontal-scroll {
-            width: 100%;
-            overflow-x: auto;
-            white-space: nowrap;
-            margin: 0 auto;
-            padding: 1rem 0;
-        }
-
-        .horizontal-scroll img {
-            max-width: 300px; /* Set a maximum width */
-            height: auto;
-            display: inline-block;
-            margin: 0 1rem;
-            border-radius: 10px; /* Add a slight border radius */
-        }
     </style>
 </head>
 <body>
@@ -163,7 +175,7 @@
     </header>
     
     <div class="container" id="about">
-        <p>Associação de Pais e Encarregados de Educação.</p>
+        <p>Associação de Pais e Encarregados de Educação</p>
         <img src="https://informacoeseservicos.lisboa.pt/fileadmin/espacos/imagens/EB_jorge_barradas.jpg" alt="A sample image">
         <ul>
             <li><a href="https://www.example.com">Example Website</a></li>
@@ -172,7 +184,7 @@
     </div>
     
     <!-- Horizontal Scrollable Section -->
-    <section class="horizontal-scroll">
+    <section class="horizontal-scroll" id="pictures">
         <img src="https://via.placeholder.com/300x200" alt="Image 1">
         <img src="https://via.placeholder.com/300x200" alt="Image 2">
         <img src="https://via.placeholder.com/300x200" alt="Image 3">
