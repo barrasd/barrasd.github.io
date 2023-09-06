@@ -110,18 +110,19 @@
             padding: 0;
             display: flex;
             justify-content: center;
+            align-items: center; /* Center the items vertically */
         }
 
         .index ul li {
             font-size: 1rem;
             color: #555;
             margin: 0 1rem; /* Adjust spacing between items */
-            cursor: pointer;
-            transition: color 0.3s;
+            transition: background-color 0.3s; /* Add transition effect for background-color */
+            border-radius: 50%; /* Make the items circular */
         }
 
         .index ul li:hover {
-            color: #007BFF;
+            background-color: #e5e5e5; /* Add shading effect on hover */
         }
 
         /* Styles for the members section */
@@ -139,11 +140,13 @@
 
         .member {
             margin: 1rem;
+            overflow: hidden; /* Hide overflowing content */
         }
 
         .member img {
-            max-width: 200px; /* Adjust image size */
-            height: auto;
+            max-width: 150px; /* Make the images 1.5 times bigger */
+            height: 150px; /* Set a fixed height */
+            object-fit: cover; /* Crop and fit the image within the container */
             display: block;
             margin: 1rem auto;
             border-radius: 50%; /* Make the images circular */
@@ -167,10 +170,28 @@
             text-decoration: none;
             font-size: 1rem;
         }
+
+        /* Styles for the horizontal scrollable section */
+        .horizontal-scroll {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+
+        .horizontal-scroll img {
+            max-width: 150px; /* Make the images 1.5 times bigger */
+            height: 150px; /* Set a fixed height */
+            object-fit: cover; /* Crop and fit the image within the container */
+            display: inline-block;
+            margin: 0 1rem;
+            border-radius: 50%; /* Make the images circular */
+        }
     </style>
 </head>
 <body>
-    <header>
+    <header id="header">
         <h1>EB1 Jorge Barradas</h1>
     </header>
     
@@ -194,6 +215,16 @@
             <li><a href="https://www.github.com">GitHub</a></li>
         </ul>
     </div>
+    
+    <!-- Horizontal Scrollable Section -->
+    <section class="horizontal-scroll">
+        <img src="https://rare-gallery.com/thumbnail/1322679-Rosamund-Pike-Moiraine-DamodredThe-Wheel-Of-Time-HD.jpg" alt="Member 1">
+        <img src="https://cdn.vox-cdn.com/thumbor/jZiVyJEmmBXXS-7IRqMUPUAA4jM=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/8720401/ktokatitmir0.jpg" alt="Member 2">
+        <img src="https://via.placeholder.com/150" alt="Member 3">
+        <img src="https://via.placeholder.com/150" alt="Member 4">
+        <img src="https://via.placeholder.com/150" alt="Member 5">
+        <!-- Add more images as needed -->
+    </section>
     
     <!-- Members Section -->
     <section class="members" id="members">
