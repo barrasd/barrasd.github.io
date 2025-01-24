@@ -68,7 +68,6 @@
         let bottomRightX = bottomRightCircle.offsetLeft;
 
         function calculateTriangleArea() {
-            // Using basic triangle area formula for vertices (x1, y1), (x2, y2), (x3, y3)
             const x1 = bottomLeftX;
             const y1 = bottomLeftCircle.offsetTop;
             const x2 = bottomRightX;
@@ -110,54 +109,48 @@
         function onMouseMoveTop(e) {
             if (isDraggingTop) {
                 let newTopY = e.clientY - document.querySelector(".container").getBoundingClientRect().top;
-                let triangleArea = calculateTriangleArea();
-                
+                let originalArea = calculateTriangleArea();
+
+                // Update the position of the top vertex
                 topCircleY = newTopY;
                 topCircle.style.top = newTopY + "px";
 
-                const newBottomLeftX = bottomLeftCircle.offsetLeft;
-                const newBottomRightX = bottomRightCircle.offsetLeft;
+                // Adjust bottom vertices to keep the area constant
+                const areaDifference = calculateTriangleArea() / originalArea;
 
-                const newTriangleArea = calculateTriangleArea();
-                const adjustmentFactor = triangleArea / newTriangleArea;
-
-                bottomLeftCircle.style.left = newBottomLeftX + (newBottomLeftX - bottomLeftCircle.offsetLeft) * adjustmentFactor + "px";
-                bottomRightCircle.style.left = newBottomRightX + (newBottomRightX - bottomRightCircle.offsetLeft) * adjustmentFactor + "px";
+                bottomLeftCircle.style.left = bottomLeftX - (bottomLeftX - topCircle.offsetLeft) * areaDifference + "px";
+                bottomRightCircle.style.left = bottomRightX + (bottomRightX - topCircle.offsetLeft) * areaDifference + "px";
             }
         }
 
         function onMouseMoveBottomLeft(e) {
             if (isDraggingBottomLeft) {
-                const newLeftX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
+                let newLeftX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
+                let originalArea = calculateTriangleArea();
 
-                let newTopY = topCircleY;
-                let triangleArea = calculateTriangleArea();
-
+                // Update bottom-left vertex position
                 bottomLeftX = newLeftX;
                 bottomLeftCircle.style.left = newLeftX + "px";
-                
-                const newTriangleArea = calculateTriangleArea();
-                const adjustmentFactor = triangleArea / newTriangleArea;
 
-                topCircleY = newTopY + (newTopY - topCircleY) * adjustmentFactor;
+                // Adjust the top vertex
+                let areaDifference = calculateTriangleArea() / originalArea;
+                topCircleY = topCircleY - (topCircleY - bottomLeftCircle.offsetTop) * areaDifference;
                 topCircle.style.top = topCircleY + "px";
             }
         }
 
         function onMouseMoveBottomRight(e) {
             if (isDraggingBottomRight) {
-                const newRightX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
+                let newRightX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
+                let originalArea = calculateTriangleArea();
 
-                let newLeftX = bottomLeftCircle.offsetLeft;
-                let triangleArea = calculateTriangleArea();
-
+                // Update bottom-right vertex position
                 bottomRightX = newRightX;
                 bottomRightCircle.style.left = newRightX + "px";
 
-                const newTriangleArea = calculateTriangleArea();
-                const adjustmentFactor = triangleArea / newTriangleArea;
-
-                bottomLeftCircle.style.left = newLeftX + (newLeftX - bottomLeftCircle.offsetLeft) * adjustmentFactor + "px";
+                // Adjust bottom-left circle to keep area constant
+                let areaDifference = calculateTriangleArea() / originalArea;
+                bottomLeftCircle.style.left = bottomLeftX + (bottomLeftX - bottomRightX) * areaDifference + "px";
             }
         }
     </script>
