@@ -38,9 +38,9 @@
         <line id="line3" x1="150" y1="400" x2="350" y2="400" stroke="#000" stroke-width="2" />
 
         <!-- Circles -->
-        <circle id="qos" cx="250" cy="100" r="20" />
-        <circle id="opex" cx="150" cy="400" r="20" />
-        <circle id="automation" cx="350" cy="400" r="20" />
+        <circle id="qos" cx="250" cy="100" r="30" />
+        <circle id="opex" cx="150" cy="400" r="30" />
+        <circle id="automation" cx="350" cy="400" r="30" />
 
         <!-- Text inside circles -->
         <text id="qos-text" x="250" y="100">QoS</text>
@@ -65,9 +65,8 @@
         let dragging = null;
 
         svg.addEventListener("mousedown", (e) => {
-            const target = e.target;
-            if (target === qos || target === opex || target === automation) {
-                dragging = target;
+            if (e.target.tagName === "circle") {
+                dragging = e.target;
             }
         });
 
