@@ -67,6 +67,7 @@
         let bottomLeftX = bottomLeftCircle.offsetLeft;
         let bottomRightX = bottomRightCircle.offsetLeft;
 
+        // This function calculates the area of the triangle given its three vertices
         function calculateTriangleArea() {
             const x1 = bottomLeftX;
             const y1 = bottomLeftCircle.offsetTop;
@@ -74,7 +75,6 @@
             const y2 = bottomRightCircle.offsetTop;
             const x3 = topCircle.offsetLeft;
             const y3 = topCircleY;
-
             return Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2;
         }
 
@@ -82,6 +82,7 @@
         let isDraggingBottomLeft = false;
         let isDraggingBottomRight = false;
 
+        // Start dragging events
         topCircle.addEventListener("mousedown", (e) => {
             isDraggingTop = true;
             document.addEventListener("mousemove", onMouseMoveTop);
@@ -108,49 +109,62 @@
 
         function onMouseMoveTop(e) {
             if (isDraggingTop) {
-                let newTopY = e.clientY - document.querySelector(".container").getBoundingClientRect().top;
-                let originalArea = calculateTriangleArea();
+                const containerRect = document.querySelector(".container").getBoundingClientRect();
+                let newTopY = e.clientY - containerRect.top;
 
-                // Update the position of the top vertex
+                // Calculate the original area of the triangle
+                const originalArea = calculateTriangleArea();
+
+                // Update the top circle's position
                 topCircleY = newTopY;
                 topCircle.style.top = newTopY + "px";
 
-                // Adjust bottom vertices to keep the area constant
-                const areaDifference = calculateTriangleArea() / originalArea;
+                // Adjust the bottom-left and bottom-right positions based on the area preservation
+                const currentArea = calculateTriangleArea();
+                const scale = originalArea / currentArea;
 
-                bottomLeftCircle.style.left = bottomLeftX - (bottomLeftX - topCircle.offsetLeft) * areaDifference + "px";
-                bottomRightCircle.style.left = bottomRightX + (bottomRightX - topCircle.offsetLeft) * areaDifference + "px";
+                bottomLeftCircle.style.left = bottomLeftX * scale + "px";
+                bottomRightCircle.style.left = bottomRightX * scale + "px";
             }
         }
 
         function onMouseMoveBottomLeft(e) {
             if (isDraggingBottomLeft) {
-                let newLeftX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
-                let originalArea = calculateTriangleArea();
+                const containerRect = document.querySelector(".container").getBoundingClientRect();
+                let newLeftX = e.clientX - containerRect.left;
 
-                // Update bottom-left vertex position
+                // Calculate the original area of the triangle
+                const originalArea = calculateTriangleArea();
+
+                // Update bottom-left circle's position
                 bottomLeftX = newLeftX;
                 bottomLeftCircle.style.left = newLeftX + "px";
 
-                // Adjust the top vertex
-                let areaDifference = calculateTriangleArea() / originalArea;
-                topCircleY = topCircleY - (topCircleY - bottomLeftCircle.offsetTop) * areaDifference;
+                // Adjust the top circle's vertical position
+                const currentArea = calculateTriangleArea();
+                const scale = originalArea / currentArea;
+                topCircleY = topCircleY * scale;
                 topCircle.style.top = topCircleY + "px";
             }
         }
 
         function onMouseMoveBottomRight(e) {
             if (isDraggingBottomRight) {
-                let newRightX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
-                let originalArea = calculateTriangleArea();
+                const containerRect = document.querySelector(".container").getBoundingClientRect();
+                let newRightX = e.clientX - containerRect.left;
 
-                // Update bottom-right vertex position
+                // Calculate the original area of the triangle
+                const originalArea = calculateTriangleArea();
+
+                // Update bottom-right circle's position
                 bottomRightX = newRightX;
                 bottomRightCircle.style.left = newRightX + "px";
 
-                // Adjust bottom-left circle to keep area constant
-                let areaDifference = calculateTriangleArea() / originalArea;
-                bottomLeftCircle.style.left = bottomLeftX + (bottomLeftX - bottomRightX) * areaDifference + "px";
+                // Adjust bottom-left position to keep the area constant
+                const currentArea = calculateTriangleArea();
+                const scale = originalArea / currentArea;
+
+                bottomLeftCircle.style.left = bottomLeftX * scale + "px";
             }
         }
     </script>
