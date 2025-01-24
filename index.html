@@ -36,31 +36,76 @@
             { x: 300, y: 100 }  // Vertex C
         ];
 
-        const fixedArea = calculateArea(vertices);
+        let fixedArea = calculateArea(vertices);
         let draggingVertex = null;
 
-        // Calculate the area of the triangle
         function calculateArea([A, B, C]) {
             return Math.abs((A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2);
         }
 
-        // Adjust the other two vertices to maintain the same area
         function adjustVertices(draggedIndex) {
-            const [A, B, C] = vertices;
-            const dragged = vertices[draggedIndex];
-            const others = vertices.filter((_, index) => index !== draggedIndex);
+            const A = vertices[(draggedIndex + 1) % 3];
+            const B = vertices[(draggedIndex + 2) % 3];
+            const C = vertices[draggedIndex];
 
-            // Adjusting one of the others to maintain the area
-            const fixed = others[0];
-            const moving = others[1];
+            const currentArea = calculateArea([A, B, C]);
+            const scaleFactor = Math.sqrt(fixedArea / currentArea);
 
-            // Keep the fixedArea invariant
-            const dx = moving.x - fixed.x;
-            const dy = moving.y - fixed.y;
+            if (C.x === A.x) {
+                const deltaY = B.y - A.y;
+                B.y = A.y + deltaY * scaleFactor;
+            } else {
+                const deltaX = B.x - A.x;
+                B.x = A.x + deltaX * scaleFactor;
+            }
+        }
 
-            if (draggedIndex === 0) {
-                // Adjust vertex B or C
-                fixed.x += dy / vertex.A/B });
- 
-``}`
+        function drawTriangle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(vertices[0].x, vertices[0].y);
+            vertices.forEach(v => ctx.lineTo(v.x, v.y));
+            ctx.closePath();
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
+            // Draw vertices
+            vertices.forEach(vertex => {
+                ctx.beginPath();
+                ctx.arc(vertex.x, vertex.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+            });
+        }
+
+        canvas.addEventListener('mousedown', (event) => {
+            const { offsetX, offsetY } = event;
+            draggingVertex = vertices.findIndex(vertex =>
+                Math.hypot(vertex.x - offsetX, vertex.y - offsetY) < 10
+            );
+        });
+
+        canvas.addEventListener('mousemove', (event) => {
+            if (draggingVertex !== null) {
+                const { offsetX, offsetY } = event;
+
+                if (draggingVertex === 0 || draggingVertex === 1) {
+                    vertices[draggingVertex].x = offsetX;
+                } else {
+                    vertices[draggingVertex].y = offsetY;
+                }
+
+                adjustVertices(draggingVertex);
+                drawTriangle();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            draggingVertex = null;
+        });
+
+        drawTriangle();
+    </script>
+</body>
+</html>
