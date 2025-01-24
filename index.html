@@ -44,24 +44,23 @@
             return Math.abs((A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2);
         }
 
-        // Adjust the other two vertices to maintain the same area
+        // Adjust the other vertices to maintain the same area
         function adjustVertices(draggedIndex) {
-            const dragged = vertices[draggedIndex];
-            const [fixed1, fixed2] = vertices.filter((_, index) => index !== draggedIndex);
+            const [A, B, C] = vertices;
+            const base = Math.abs(B.x - A.x);
+            const height = (2 * fixedArea) / base;
 
-            // Maintain the area by adjusting the appropriate coordinate
-            if (draggedIndex === 0 || draggedIndex === 1) {
-                // Bottom vertices only move horizontally
-                const base = Math.abs(vertices[1].x - vertices[0].x);
-                const height = (2 * fixedArea) / base;
-                vertices[2].y = fixed2.y - height;
-            } else if (draggedIndex === 2) {
-                // Top vertex only moves vertically
-                const base = Math.abs(vertices[1].x - vertices[0].x);
-                const height = (2 * fixedArea) / base;
-                vertices[2].y = dragged.y;
-                const yChange = height - Math.abs(vertices[2].y - fixed1.y);
-                vertices[0].y = vertices[1].y += yChange;
+            if (draggedIndex === 2) {
+                // Top vertex dragged vertically
+                const newHeight = Math.abs(C.y - A.y);
+                const scaleFactor = height / newHeight;
+                vertices[0].x = C.x - base / 2;
+                vertices[1].x = C.x + base / 2;
+            } else {
+                // Bottom vertices dragged horizontally
+                const newBase = Math.abs(vertices[1].x - vertices[0].x);
+                const newHeight = (2 * fixedArea) / newBase;
+                vertices[2].y = Math.max(0, A.y - newHeight); // Adjust the top vertex vertically
             }
         }
 
