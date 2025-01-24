@@ -3,133 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triangle Circles</title>
+    <title>Interactive Triangle Circles</title>
     <style>
         body {
-            margin: 0;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
             background-color: #f0f0f0;
         }
-        .container {
+
+        .triangle-container {
             position: relative;
-            width: 600px;
-            height: 600px;
+            width: 300px;
+            height: 300px;
         }
+
         .circle {
             position: absolute;
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            border: 2px solid black;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            font-size: 16px;
-        }
-        .circle-top {
-            top: 50px;
-            left: 250px;
-        }
-        .circle-bottom-left {
-            bottom: 50px;
-            left: 100px;
-        }
-        .circle-bottom-right {
-            bottom: 50px;
-            right: 100px;
-        }
-        .circle-top, .circle-bottom-left, .circle-bottom-right {
+            background-color: white;
+            font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
+            user-select: none;
+        }
+
+        .line {
+            position: absolute;
+            width: 2px;
+            background-color: black;
+            transform-origin: top;
+        }
+
+        /* Lines */
+        #line1 {
+            top: 50%;
+            left: 50%;
+            height: 150px;
+            transform: translateX(-50%) rotate(-60deg);
+        }
+
+        #line2 {
+            top: 50%;
+            left: 50%;
+            height: 150px;
+            transform: translateX(-50%) rotate(60deg);
+        }
+
+        #line3 {
+            top: 85%;
+            left: 50%;
+            width: 150px;
+            height: 2px;
+            transform: translateX(-50%);
+        }
+
+        /* Circles */
+        #circle1 {
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #circle2 {
+            bottom: 10%;
+            left: 25%;
+            transform: translate(-50%, 50%);
+        }
+
+        #circle3 {
+            bottom: 10%;
+            right: 25%;
+            transform: translate(50%, 50%);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="circleTop" class="circle circle-top" onmousedown="startMove(event, 'top')">
-            Top
-        </div>
-        <div id="circleBottomLeft" class="circle circle-bottom-left" onmousedown="startMove(event, 'bottom-left')">
-            Bottom Left
-        </div>
-        <div id="circleBottomRight" class="circle circle-bottom-right" onmousedown="startMove(event, 'bottom-right')">
-            Bottom Right
-        </div>
+    <div class="triangle-container">
+        <div class="line" id="line1"></div>
+        <div class="line" id="line2"></div>
+        <div class="line" id="line3"></div>
+
+        <div class="circle" id="circle1">Top</div>
+        <div class="circle" id="circle2">Left</div>
+        <div class="circle" id="circle3">Right</div>
     </div>
 
     <script>
-        let isMoving = false;
-        let moveType = null;
-        let startX = 0;
-        let startY = 0;
-        let initialTopLeftX = 0;
-        let initialTopLeftY = 0;
-        let initialBottomLeftX = 0;
-        let initialBottomLeftY = 0;
-        let initialBottomRightX = 0;
-        let initialBottomRightY = 0;
+        const circle1 = document.getElementById('circle1');
+        const circle2 = document.getElementById('circle2');
+        const circle3 = document.getElementById('circle3');
 
-        function startMove(e, type) {
-            isMoving = true;
-            moveType = type;
-            startX = e.clientX;
-            startY = e.clientY;
-            const topCircle = document.getElementById('circleTop');
-            const bottomLeftCircle = document.getElementById('circleBottomLeft');
-            const bottomRightCircle = document.getElementById('circleBottomRight');
-            
-            initialTopLeftX = topCircle.offsetLeft;
-            initialTopLeftY = topCircle.offsetTop;
-            initialBottomLeftX = bottomLeftCircle.offsetLeft;
-            initialBottomLeftY = bottomLeftCircle.offsetTop;
-            initialBottomRightX = bottomRightCircle.offsetLeft;
-            initialBottomRightY = bottomRightCircle.offsetTop;
+        const containerRect = document.querySelector('.triangle-container').getBoundingClientRect();
 
-            document.addEventListener('mousemove', moveCircle);
-            document.addEventListener('mouseup', stopMove);
+        function setPosition(circle, x, y) {
+            circle.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        function moveCircle(e) {
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-            const topCircle = document.getElementById('circleTop');
-            const bottomLeftCircle = document.getElementById('circleBottomLeft');
-            const bottomRightCircle = document.getElementById('circleBottomRight');
+        function moveCircles(event, circle) {
+            const rect = circle.getBoundingClientRect();
+            let xOffset = 0;
+            let yOffset = 0;
 
-            if (moveType === 'bottom-left') {
-                // Move bottom left circle horizontally
-                bottomLeftCircle.style.left = `${initialBottomLeftX + deltaX}px`;
+            if (circle === circle1) {
+                yOffset = event.movementY;
+                const newTop = rect.top + yOffset - containerRect.top;
+                if (newTop >= 0 && newTop <= 150) {
+                    circle1.style.top = `${newTop}px`;
+                    const horizontalOffset = yOffset / 2;
+                    circle2.style.left = `${parseFloat(circle2.style.left || 25) - horizontalOffset}px`;
+                    circle3.style.left = `${parseFloat(circle3.style.left || 25) + horizontalOffset}px`;
+                }
+            } else if (circle === circle2 || circle === circle3) {
+                xOffset = event.movementX;
+                const newLeft = rect.left + xOffset - containerRect.left;
 
-                // Move top circle vertically based on the left circle's movement
-                topCircle.style.top = `${initialTopLeftY + deltaY}px`;
-
-                // Synchronize right bottom circle horizontally
-                bottomRightCircle.style.left = `${initialBottomRightX + deltaX}px`;
-            } else if (moveType === 'bottom-right') {
-                // Move bottom right circle horizontally
-                bottomRightCircle.style.left = `${initialBottomRightX + deltaX}px`;
-
-                // Synchronize left bottom circle horizontally
-                bottomLeftCircle.style.left = `${initialBottomLeftX + deltaX}px`;
-            } else if (moveType === 'top') {
-                // Move top circle vertically
-                topCircle.style.top = `${initialTopLeftY + deltaY}px`;
-
-                // Move bottom circles horizontally based on the top circle's movement
-                bottomLeftCircle.style.left = `${initialBottomLeftX - deltaX}px`;
-                bottomRightCircle.style.left = `${initialBottomRightX + deltaX}px`;
+                if (circle === circle2) {
+                    if (newLeft >= 0 && newLeft <= 75) {
+                        circle2.style.left = `${newLeft}px`;
+                        const verticalOffset = -xOffset / 2;
+                        circle1.style.top = `${parseFloat(circle1.style.top || 0) + verticalOffset}px`;
+                    }
+                } else if (circle === circle3) {
+                    if (newLeft >= 225 && newLeft <= 300) {
+                        circle3.style.left = `${newLeft}px`;
+                        const verticalOffset = -xOffset / 2;
+                        circle1.style.top = `${parseFloat(circle1.style.top || 0) + verticalOffset}px`;
+                    }
+                }
             }
         }
 
-        function stopMove() {
-            isMoving = false;
-            document.removeEventListener('mousemove', moveCircle);
-            document.removeEventListener('mouseup', stopMove);
+        function onMouseDown(event, circle) {
+            function onMouseMove(e) {
+                moveCircles(e, circle);
+            }
+
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
         }
+
+        circle1.addEventListener('mousedown', (e) => onMouseDown(e, circle1));
+        circle2.addEventListener('mousedown', (e) => onMouseDown(e, circle2));
+        circle3.addEventListener('mousedown', (e) => onMouseDown(e, circle3));
     </script>
 </body>
 </html>
