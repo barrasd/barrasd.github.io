@@ -51,8 +51,8 @@
         <circle id="automation" cx="600" cy="700" r="50" />
 
         <!-- Text inside circles -->
-        <text id="qos-text" x="400" y="90">QoS</text>
-        <text x="400" y="110">Flexibility</text>
+        <text id="qos-text-line1" x="400" y="90">QoS</text>
+        <text id="qos-text-line2" x="400" y="110">Flexibility</text>
         <text id="opex-text" x="200" y="700">Opex</text>
         <text id="automation-text" x="600" y="700">Automation</text>
     </svg>
@@ -63,7 +63,8 @@
         const opex = document.getElementById("opex");
         const automation = document.getElementById("automation");
 
-        const qosText = document.getElementById("qos-text");
+        const qosTextLine1 = document.getElementById("qos-text-line1");
+        const qosTextLine2 = document.getElementById("qos-text-line2");
         const opexText = document.getElementById("opex-text");
         const automationText = document.getElementById("automation-text");
 
@@ -98,7 +99,8 @@
                 opexText.setAttribute("x", newX);
 
                 qos.cy.baseVal.value += deltaX; // Move QoS vertically
-                qosText.setAttribute("y", qos.cy.baseVal.value - 10);
+                qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
+                qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
 
                 updateLines();
             }
@@ -120,7 +122,8 @@
                 const newY = Math.min(Math.max(mouseY, 50), 750); // Constrain vertical movement
 
                 qos.cy.baseVal.value = newY;
-                qosText.setAttribute("y", newY - 10);
+                qosTextLine1.setAttribute("y", newY - 10);
+                qosTextLine2.setAttribute("y", newY + 10);
 
                 updateLines();
             }
