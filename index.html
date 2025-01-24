@@ -44,23 +44,26 @@
             return Math.abs((A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2);
         }
 
-        // Adjust the other vertices to maintain the same area
+        // Adjust the vertices to maintain the area based on the dragged vertex
         function adjustVertices(draggedIndex) {
             const [A, B, C] = vertices;
-            const base = Math.abs(B.x - A.x);
-            const height = (2 * fixedArea) / base;
 
-            if (draggedIndex === 2) {
-                // Top vertex dragged vertically
-                const newHeight = Math.abs(C.y - A.y);
-                const scaleFactor = height / newHeight;
-                vertices[0].x = C.x - base / 2;
-                vertices[1].x = C.x + base / 2;
-            } else {
-                // Bottom vertices dragged horizontally
-                const newBase = Math.abs(vertices[1].x - vertices[0].x);
-                const newHeight = (2 * fixedArea) / newBase;
-                vertices[2].y = Math.max(0, A.y - newHeight); // Adjust the top vertex vertically
+            if (draggedIndex === 0) {
+                // Bottom left vertex dragged, adjust only the top vertex
+                const base = Math.abs(B.x - A.x);
+                const height = (2 * fixedArea) / base;
+                vertices[2].y = A.y - height; // Adjust top vertex vertically
+            } else if (draggedIndex === 1) {
+                // Bottom right vertex dragged, adjust only the bottom left vertex
+                const base = Math.abs(B.x - A.x);
+                const height = (2 * fixedArea) / base;
+                vertices[0].x = B.x - base; // Adjust bottom left vertex horizontally
+            } else if (draggedIndex === 2) {
+                // Top vertex dragged, adjust bottom vertices symmetrically
+                const base = Math.abs(B.x - A.x);
+                const height = (2 * fixedArea) / base;
+                const yChange = height - Math.abs(C.y - A.y);
+                vertices[0].y = vertices[1].y = C.y + yChange;
             }
         }
 
