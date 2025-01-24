@@ -13,6 +13,13 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f9;
+            position: relative;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
         }
         svg {
             user-select: none;
@@ -31,6 +38,7 @@
     </style>
 </head>
 <body>
+    <img src="https://www.cargill.com/favicon.ico" alt="Cargill Logo" class="logo" />
     <svg width="500" height="500">
         <!-- Triangle lines -->
         <line id="line1" x1="250" y1="100" x2="150" y2="400" stroke="#000" stroke-width="2" />
