@@ -74,6 +74,34 @@
 
         let dragging = null;
 
+        // Center the triangle on page load
+        window.onload = () => {
+            const centerX = svg.clientWidth / 2;
+            const centerY = svg.clientHeight / 2;
+
+            const triangleHeight = 400;
+            const triangleBaseHalf = 100;
+
+            qos.cx.baseVal.value = centerX;
+            qos.cy.baseVal.value = centerY - triangleHeight / 2;
+            qosTextLine1.setAttribute("x", qos.cx.baseVal.value);
+            qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
+            qosTextLine2.setAttribute("x", qos.cx.baseVal.value);
+            qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
+
+            opex.cx.baseVal.value = centerX - triangleBaseHalf;
+            opex.cy.baseVal.value = centerY + triangleHeight / 2;
+            opexText.setAttribute("x", opex.cx.baseVal.value);
+            opexText.setAttribute("y", opex.cy.baseVal.value);
+
+            automation.cx.baseVal.value = centerX + triangleBaseHalf;
+            automation.cy.baseVal.value = centerY + triangleHeight / 2;
+            automationText.setAttribute("x", automation.cx.baseVal.value);
+            automationText.setAttribute("y", automation.cy.baseVal.value);
+
+            updateLines();
+        };
+
         svg.addEventListener("mousedown", (e) => {
             if (e.target.tagName === "circle") {
                 dragging = e.target;
