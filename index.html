@@ -41,20 +41,20 @@
     <img src="https://www.cargill.com/image/1432220384159/cargill-logo-header.png?v=1728003182000" alt="Cargill Logo" class="logo" />
     <svg width="800" height="800">
         <!-- Triangle lines -->
-        <line id="line1" x1="400" y1="100" x2="200" y2="700" stroke="#000" stroke-width="2" />
-        <line id="line2" x1="400" y1="100" x2="600" y2="700" stroke="#000" stroke-width="2" />
-        <line id="line3" x1="200" y1="700" x2="600" y2="700" stroke="#000" stroke-width="2" />
+        <line id="line1" x1="400" y1="200" x2="300" y2="600" stroke="#000" stroke-width="2" />
+        <line id="line2" x1="400" y1="200" x2="500" y2="600" stroke="#000" stroke-width="2" />
+        <line id="line3" x1="300" y2="600" x2="500" y2="600" stroke="#000" stroke-width="2" />
 
         <!-- Circles -->
-        <circle id="qos" cx="400" cy="100" r="50" />
-        <circle id="opex" cx="200" cy="700" r="50" />
-        <circle id="automation" cx="600" cy="700" r="50" />
+        <circle id="qos" cx="400" cy="200" r="50" />
+        <circle id="opex" cx="300" cy="600" r="50" />
+        <circle id="automation" cx="500" cy="600" r="50" />
 
         <!-- Text inside circles -->
-        <text id="qos-text-line1" x="400" y="90">QoS</text>
-        <text id="qos-text-line2" x="400" y="110">Flexibility</text>
-        <text id="opex-text" x="200" y="700">Opex</text>
-        <text id="automation-text" x="600" y="700">Automation</text>
+        <text id="qos-text-line1" x="400" y="190">QoS</text>
+        <text id="qos-text-line2" x="400" y="210">Flexibility</text>
+        <text id="opex-text" x="300" y="600">Opex</text>
+        <text id="automation-text" x="500" y="600">Automation</text>
     </svg>
 
     <script>
@@ -92,7 +92,7 @@
             const mouseY = e.clientY - svgRect.top;
 
             if (dragging === opex) {
-                const newX = Math.min(Math.max(mouseX, 100), 700); // Constrain horizontal movement
+                const newX = Math.min(Math.max(mouseX, 250), 550); // Constrain horizontal movement
                 const deltaX = newX - opex.cx.baseVal.value;
 
                 opex.cx.baseVal.value = newX;
@@ -106,7 +106,7 @@
             }
 
             if (dragging === automation) {
-                const newX = Math.min(Math.max(mouseX, 100), 700); // Constrain horizontal movement
+                const newX = Math.min(Math.max(mouseX, 250), 550); // Constrain horizontal movement
                 const deltaX = newX - automation.cx.baseVal.value;
 
                 automation.cx.baseVal.value = newX;
@@ -119,7 +119,7 @@
             }
 
             if (dragging === qos) {
-                const newY = Math.min(Math.max(mouseY, 50), 750); // Constrain vertical movement
+                const newY = Math.min(Math.max(mouseY, 150), 250); // Constrain vertical movement
 
                 qos.cy.baseVal.value = newY;
                 qosTextLine1.setAttribute("y", newY - 10);
