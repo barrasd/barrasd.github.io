@@ -3,156 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Triangle Circles</title>
+    <title>Interactive Triangle</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f4f4f9;
         }
-
-        .triangle-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
-
-        .circle {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: grab;
+        svg {
             user-select: none;
+            cursor: pointer;
         }
-
-        #circle1 {
-            top: 50px;
-            left: 175px;
+        circle {
+            fill: #4caf50;
         }
-
-        #circle2 {
-            bottom: 50px;
-            left: 75px;
-        }
-
-        #circle3 {
-            bottom: 50px;
-            right: 75px;
-        }
-
-        .line {
-            position: absolute;
-            width: 2px;
-            background-color: black;
-            transform-origin: top;
-        }
-
-        #line1 {
-            top: 50px;
-            left: 175px;
-            height: 305px;
-            transform: rotate(120deg);
-        }
-
-        #line2 {
-            top: 50px;
-            left: 175px;
-            height: 305px;
-            transform: rotate(60deg);
-        }
-
-        #line3 {
-            bottom: 50px;
-            left: 75px;
-            width: 250px;
-            height: 2px;
+        text {
+            font-size: 14px;
+            font-weight: bold;
+            fill: white;
+            text-anchor: middle;
+            alignment-baseline: middle;
         }
     </style>
 </head>
 <body>
-    <div class="triangle-container">
-        <div class="line" id="line1"></div>
-        <div class="line" id="line2"></div>
-        <div class="line" id="line3"></div>
+    <svg width="500" height="500">
+        <!-- Triangle lines -->
+        <line id="line1" x1="250" y1="100" x2="150" y2="400" stroke="#000" stroke-width="2" />
+        <line id="line2" x1="250" y1="100" x2="350" y2="400" stroke="#000" stroke-width="2" />
+        <line id="line3" x1="150" y1="400" x2="350" y2="400" stroke="#000" stroke-width="2" />
 
-        <div class="circle" id="circle1">Top</div>
-        <div class="circle" id="circle2">Left</div>
-        <div class="circle" id="circle3">Right</div>
-    </div>
+        <!-- Circles -->
+        <circle id="qos" cx="250" cy="100" r="20" />
+        <circle id="opex" cx="150" cy="400" r="20" />
+        <circle id="automation" cx="350" cy="400" r="20" />
+
+        <!-- Text inside circles -->
+        <text id="qos-text" x="250" y="100">QoS</text>
+        <text id="opex-text" x="150" y="400">Opex</text>
+        <text id="automation-text" x="350" y="400">Automation</text>
+    </svg>
 
     <script>
-        const circle1 = document.getElementById('circle1');
-        const circle2 = document.getElementById('circle2');
-        const circle3 = document.getElementById('circle3');
+        const svg = document.querySelector("svg");
+        const qos = document.getElementById("qos");
+        const opex = document.getElementById("opex");
+        const automation = document.getElementById("automation");
 
-        function setPosition(circle, top, left) {
-            circle.style.top = `${top}px`;
-            circle.style.left = `${left}px`;
-        }
+        const qosText = document.getElementById("qos-text");
+        const opexText = document.getElementById("opex-text");
+        const automationText = document.getElementById("automation-text");
 
-        function onMouseDown(event, circle) {
-            const startX = event.clientX;
-            const startY = event.clientY;
-            const rect = circle.getBoundingClientRect();
+        const line1 = document.getElementById("line1");
+        const line2 = document.getElementById("line2");
+        const line3 = document.getElementById("line3");
 
-            const offsetX = startX - rect.left;
-            const offsetY = startY - rect.top;
+        let dragging = null;
 
-            function onMouseMove(e) {
-                let newLeft = e.clientX - offsetX;
-                let newTop = e.clientY - offsetY;
+        svg.addEventListener("mousedown", (e) => {
+            const target = e.target;
+            if (target === qos || target === opex || target === automation) {
+                dragging = target;
+            }
+        });
 
-                if (circle === circle1) {
-                    // Top circle can only move vertically
-                    const containerHeight = 400;
-                    const maxTop = 150;
-                    const minTop = 50;
-                    newTop = Math.max(minTop, Math.min(maxTop, newTop));
-                    setPosition(circle, newTop, 175);
+        svg.addEventListener("mouseup", () => {
+            dragging = null;
+        });
 
-                    // Adjust bottom circles symmetrically
-                    const delta = 150 - newTop;
-                    setPosition(circle2, 350, 75 - delta / 2);
-                    setPosition(circle3, 350, 325 + delta / 2);
-                } else if (circle === circle2 || circle === circle3) {
-                    // Bottom circles can only move horizontally
-                    const containerWidth = 400;
-                    const maxLeft = circle === circle2 ? 125 : 325;
-                    const minLeft = circle === circle2 ? 25 : 225;
-                    newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
+        svg.addEventListener("mousemove", (e) => {
+            if (!dragging) return;
 
-                    setPosition(circle, 350, newLeft);
+            const svgRect = svg.getBoundingClientRect();
+            const mouseX = e.clientX - svgRect.left;
+            const mouseY = e.clientY - svgRect.top;
 
-                    // Adjust the top circle symmetrically
-                    const delta = circle === circle2 ? 75 - newLeft : newLeft - 325;
-                    const newTop = 150 - delta;
-                    setPosition(circle1, newTop, 175);
-                }
+            if (dragging === opex) {
+                const newX = Math.min(Math.max(mouseX, 50), 450); // Constrain horizontal movement
+                const deltaX = newX - opex.cx.baseVal.value;
+
+                opex.cx.baseVal.value = newX;
+                opexText.setAttribute("x", newX);
+
+                qos.cy.baseVal.value += deltaX; // Move QoS vertically
+                qosText.setAttribute("y", qos.cy.baseVal.value);
+
+                updateLines();
             }
 
-            function onMouseUp() {
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
+            if (dragging === automation) {
+                const newX = Math.min(Math.max(mouseX, 50), 450); // Constrain horizontal movement
+                const deltaX = newX - automation.cx.baseVal.value;
+
+                automation.cx.baseVal.value = newX;
+                automationText.setAttribute("x", newX);
+
+                opex.cx.baseVal.value -= deltaX; // Move Opex horizontally in the opposite direction
+                opexText.setAttribute("x", opex.cx.baseVal.value);
+
+                updateLines();
             }
 
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-        }
+            if (dragging === qos) {
+                const newY = Math.min(Math.max(mouseY, 50), 450); // Constrain vertical movement
 
-        circle1.addEventListener('mousedown', (e) => onMouseDown(e, circle1));
-        circle2.addEventListener('mousedown', (e) => onMouseDown(e, circle2));
-        circle3.addEventListener('mousedown', (e) => onMouseDown(e, circle3));
+                qos.cy.baseVal.value = newY;
+                qosText.setAttribute("y", newY);
+
+                updateLines();
+            }
+        });
+
+        function updateLines() {
+            line1.setAttribute("x1", qos.cx.baseVal.value);
+            line1.setAttribute("y1", qos.cy.baseVal.value);
+            line1.setAttribute("x2", opex.cx.baseVal.value);
+            line1.setAttribute("y2", opex.cy.baseVal.value);
+
+            line2.setAttribute("x1", qos.cx.baseVal.value);
+            line2.setAttribute("y1", qos.cy.baseVal.value);
+            line2.setAttribute("x2", automation.cx.baseVal.value);
+            line2.setAttribute("y2", automation.cy.baseVal.value);
+
+            line3.setAttribute("x1", opex.cx.baseVal.value);
+            line3.setAttribute("y1", opex.cy.baseVal.value);
+            line3.setAttribute("x2", automation.cx.baseVal.value);
+            line3.setAttribute("y2", automation.cy.baseVal.value);
+        }
     </script>
 </body>
 </html>
