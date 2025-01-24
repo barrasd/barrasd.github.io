@@ -47,25 +47,22 @@
         // Adjust the other two vertices to maintain the same area
         function adjustVertices(draggedIndex) {
             const dragged = vertices[draggedIndex];
-            const others = vertices.filter((_, index) => index !== draggedIndex);
+            const [fixed1, fixed2] = vertices.filter((_, index) => index !== draggedIndex);
 
-            const fixed = others[0];
-            const moving = others[1];
-
-            const currentArea = calculateArea(vertices);
-            const scaleFactor = Math.sqrt(fixedArea / currentArea);
-
+            // Maintain the area by adjusting the appropriate coordinate
             if (draggedIndex === 0 || draggedIndex === 1) {
-                // Bottom vertices only move horizontally, adjust the other bottom vertex's x-coordinate
-                moving.x = fixed.x + (moving.x - fixed.x) * scaleFactor;
+                // Bottom vertices only move horizontally
+                const base = Math.abs(vertices[1].x - vertices[0].x);
+                const height = (2 * fixedArea) / base;
+                vertices[2].y = fixed2.y - height;
             } else if (draggedIndex === 2) {
-                // Top vertex only moves vertically, adjust its y-coordinate
-                moving.y = fixed.y + (moving.y - fixed.y) * scaleFactor;
+                // Top vertex only moves vertically
+                const base = Math.abs(vertices[1].x - vertices[0].x);
+                const height = (2 * fixedArea) / base;
+                vertices[2].y = dragged.y;
+                const yChange = height - Math.abs(vertices[2].y - fixed1.y);
+                vertices[0].y = vertices[1].y += yChange;
             }
-
-            // Ensure bottom vertices remain at the same y-level, and top vertex remains at the same x-level
-            vertices[0].y = vertices[1].y = 300; // Bottom vertices fixed at y = 300
-            vertices[2].x = 300; // Top vertex fixed at x = 300
         }
 
         function drawTriangle() {
