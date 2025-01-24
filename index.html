@@ -107,65 +107,70 @@
             document.removeEventListener("mousemove", onMouseMoveBottomRight);
         });
 
+        // When the top vertex is moved, adjust the bottom vertices to preserve the area
         function onMouseMoveTop(e) {
             if (isDraggingTop) {
                 const containerRect = document.querySelector(".container").getBoundingClientRect();
                 let newTopY = e.clientY - containerRect.top;
 
-                // Calculate the original area of the triangle
+                // Get the initial area of the triangle
                 const originalArea = calculateTriangleArea();
 
-                // Update the top circle's position
+                // Update the top vertex position
                 topCircleY = newTopY;
                 topCircle.style.top = newTopY + "px";
 
-                // Calculate the new area and scale accordingly
-                const currentArea = calculateTriangleArea();
-                const scale = originalArea / currentArea;
+                // Calculate the new area
+                const newArea = calculateTriangleArea();
+                const scale = originalArea / newArea;
 
-                // Adjust the bottom-left and bottom-right vertices to preserve the area
+                // Adjust the bottom-left and bottom-right vertices based on the scaling factor
                 bottomLeftCircle.style.left = (bottomLeftX * scale) + "px";
                 bottomRightCircle.style.left = (bottomRightX * scale) + "px";
             }
         }
 
+        // When the bottom-left vertex is moved, adjust the top vertex to preserve the area
         function onMouseMoveBottomLeft(e) {
             if (isDraggingBottomLeft) {
                 const containerRect = document.querySelector(".container").getBoundingClientRect();
                 let newLeftX = e.clientX - containerRect.left;
 
-                // Calculate the original area of the triangle
+                // Get the initial area of the triangle
                 const originalArea = calculateTriangleArea();
 
-                // Update bottom-left circle's position
+                // Update the bottom-left vertex position
                 bottomLeftX = newLeftX;
                 bottomLeftCircle.style.left = newLeftX + "px";
 
-                // Adjust the top circle's vertical position to preserve area
-                const currentArea = calculateTriangleArea();
-                const scale = originalArea / currentArea;
+                // Calculate the new area
+                const newArea = calculateTriangleArea();
+                const scale = originalArea / newArea;
+
+                // Adjust the top vertex position vertically to keep the area constant
                 topCircleY = topCircleY * scale;
                 topCircle.style.top = topCircleY + "px";
             }
         }
 
+        // When the bottom-right vertex is moved, adjust the bottom-left vertex to preserve the area
         function onMouseMoveBottomRight(e) {
             if (isDraggingBottomRight) {
                 const containerRect = document.querySelector(".container").getBoundingClientRect();
                 let newRightX = e.clientX - containerRect.left;
 
-                // Calculate the original area of the triangle
+                // Get the initial area of the triangle
                 const originalArea = calculateTriangleArea();
 
-                // Update bottom-right circle's position
+                // Update the bottom-right vertex position
                 bottomRightX = newRightX;
                 bottomRightCircle.style.left = newRightX + "px";
 
-                // Adjust bottom-left position to preserve the area
-                const currentArea = calculateTriangleArea();
-                const scale = originalArea / currentArea;
+                // Calculate the new area
+                const newArea = calculateTriangleArea();
+                const scale = originalArea / newArea;
 
-                // Adjust bottom-left circle's position
+                // Adjust the bottom-left position to keep the area constant
                 bottomLeftCircle.style.left = (bottomLeftX * scale) + "px";
             }
         }
