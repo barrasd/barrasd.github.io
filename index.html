@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triangle with Fixed Area</title>
+    <title>Interactive Triangle</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -14,107 +13,154 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            overflow: hidden;
         }
-
-        canvas {
-            border: 1px solid #ccc;
-            cursor: crosshair;
+        .container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+        .circle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #3498db;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 10px;
+        }
+        .top { top: 0; left: 50%; transform: translateX(-50%); }
+        .bottom-left { bottom: 0; left: 30%; }
+        .bottom-right { bottom: 0; left: 70%; }
+        .label {
+            position: absolute;
+            text-align: center;
+            font-size: 12px;
+            color: black;
         }
     </style>
 </head>
 <body>
-    <canvas id="triangleCanvas" width="600" height="400"></canvas>
+
+    <div class="container">
+        <div class="circle top" id="topCircle">
+            <div class="label">top vert</div>
+        </div>
+        <div class="circle bottom-left" id="bottomLeftCircle">
+            <div class="label">capex</div>
+        </div>
+        <div class="circle bottom-right" id="bottomRightCircle">
+            <div class="label">opex</div>
+        </div>
+    </div>
 
     <script>
-        const canvas = document.getElementById('triangleCanvas');
-        const ctx = canvas.getContext('2d');
+        const topCircle = document.getElementById("topCircle");
+        const bottomLeftCircle = document.getElementById("bottomLeftCircle");
+        const bottomRightCircle = document.getElementById("bottomRightCircle");
 
-        // Initial vertices of the triangle
-        let vertices = [
-            { x: 200, y: 300 }, // Vertex A (Bottom Left)
-            { x: 400, y: 300 }, // Vertex B (Bottom Right)
-            { x: 300, y: 100 }  // Vertex C (Top)
-        ];
+        let topCircleY = topCircle.offsetTop;
+        let bottomLeftX = bottomLeftCircle.offsetLeft;
+        let bottomRightX = bottomRightCircle.offsetLeft;
 
-        const fixedArea = calculateArea(vertices);
-        let draggingVertex = null;
+        function calculateTriangleArea() {
+            // Using basic triangle area formula for vertices (x1, y1), (x2, y2), (x3, y3)
+            const x1 = bottomLeftX;
+            const y1 = bottomLeftCircle.offsetTop;
+            const x2 = bottomRightX;
+            const y2 = bottomRightCircle.offsetTop;
+            const x3 = topCircle.offsetLeft;
+            const y3 = topCircleY;
 
-        // Calculate the area of the triangle
-        function calculateArea([A, B, C]) {
-            return Math.abs((A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2);
+            return Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2;
         }
 
-        // Adjust the vertices to maintain the area based on the dragged vertex
-        function adjustVertices(draggedIndex) {
-            const [A, B, C] = vertices;
+        let isDraggingTop = false;
+        let isDraggingBottomLeft = false;
+        let isDraggingBottomRight = false;
 
-            if (draggedIndex === 0) {
-                // Bottom left vertex dragged, adjust only the top vertex
-                const base = Math.abs(B.x - A.x);
-                const height = (2 * fixedArea) / base;
-                vertices[2].y = A.y - height; // Adjust top vertex vertically
-            } else if (draggedIndex === 1) {
-                // Bottom right vertex dragged, adjust only the bottom left vertex
-                const base = Math.abs(B.x - A.x);
-                const height = (2 * fixedArea) / base;
-                vertices[0].x = B.x - base; // Adjust bottom left vertex horizontally
-            } else if (draggedIndex === 2) {
-                // Top vertex dragged, adjust bottom vertices symmetrically
-                const base = Math.abs(B.x - A.x);
-                const height = (2 * fixedArea) / base;
-                const yChange = height - Math.abs(C.y - A.y);
-                vertices[0].y = vertices[1].y = C.y + yChange;
+        topCircle.addEventListener("mousedown", (e) => {
+            isDraggingTop = true;
+            document.addEventListener("mousemove", onMouseMoveTop);
+        });
+
+        bottomLeftCircle.addEventListener("mousedown", (e) => {
+            isDraggingBottomLeft = true;
+            document.addEventListener("mousemove", onMouseMoveBottomLeft);
+        });
+
+        bottomRightCircle.addEventListener("mousedown", (e) => {
+            isDraggingBottomRight = true;
+            document.addEventListener("mousemove", onMouseMoveBottomRight);
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDraggingTop = false;
+            isDraggingBottomLeft = false;
+            isDraggingBottomRight = false;
+            document.removeEventListener("mousemove", onMouseMoveTop);
+            document.removeEventListener("mousemove", onMouseMoveBottomLeft);
+            document.removeEventListener("mousemove", onMouseMoveBottomRight);
+        });
+
+        function onMouseMoveTop(e) {
+            if (isDraggingTop) {
+                let newTopY = e.clientY - document.querySelector(".container").getBoundingClientRect().top;
+                let triangleArea = calculateTriangleArea();
+                
+                topCircleY = newTopY;
+                topCircle.style.top = newTopY + "px";
+
+                const newBottomLeftX = bottomLeftCircle.offsetLeft;
+                const newBottomRightX = bottomRightCircle.offsetLeft;
+
+                const newTriangleArea = calculateTriangleArea();
+                const adjustmentFactor = triangleArea / newTriangleArea;
+
+                bottomLeftCircle.style.left = newBottomLeftX + (newBottomLeftX - bottomLeftCircle.offsetLeft) * adjustmentFactor + "px";
+                bottomRightCircle.style.left = newBottomRightX + (newBottomRightX - bottomRightCircle.offsetLeft) * adjustmentFactor + "px";
             }
         }
 
-        function drawTriangle() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-            ctx.moveTo(vertices[0].x, vertices[0].y);
-            vertices.forEach(v => ctx.lineTo(v.x, v.y));
-            ctx.closePath();
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        function onMouseMoveBottomLeft(e) {
+            if (isDraggingBottomLeft) {
+                const newLeftX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
 
-            // Draw vertices
-            vertices.forEach(vertex => {
-                ctx.beginPath();
-                ctx.arc(vertex.x, vertex.y, 5, 0, Math.PI * 2);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-            });
+                let newTopY = topCircleY;
+                let triangleArea = calculateTriangleArea();
+
+                bottomLeftX = newLeftX;
+                bottomLeftCircle.style.left = newLeftX + "px";
+                
+                const newTriangleArea = calculateTriangleArea();
+                const adjustmentFactor = triangleArea / newTriangleArea;
+
+                topCircleY = newTopY + (newTopY - topCircleY) * adjustmentFactor;
+                topCircle.style.top = topCircleY + "px";
+            }
         }
 
-        canvas.addEventListener('mousedown', (event) => {
-            const { offsetX, offsetY } = event;
-            draggingVertex = vertices.findIndex(vertex =>
-                Math.hypot(vertex.x - offsetX, vertex.y - offsetY) < 10
-            );
-        });
+        function onMouseMoveBottomRight(e) {
+            if (isDraggingBottomRight) {
+                const newRightX = e.clientX - document.querySelector(".container").getBoundingClientRect().left;
 
-        canvas.addEventListener('mousemove', (event) => {
-            if (draggingVertex !== null) {
-                const { offsetX, offsetY } = event;
+                let newLeftX = bottomLeftCircle.offsetLeft;
+                let triangleArea = calculateTriangleArea();
 
-                if (draggingVertex === 0 || draggingVertex === 1) {
-                    // Bottom vertices only move horizontally
-                    vertices[draggingVertex].x = offsetX;
-                } else if (draggingVertex === 2) {
-                    // Top vertex only moves vertically
-                    vertices[draggingVertex].y = offsetY;
-                }
+                bottomRightX = newRightX;
+                bottomRightCircle.style.left = newRightX + "px";
 
-                adjustVertices(draggingVertex);
-                drawTriangle();
+                const newTriangleArea = calculateTriangleArea();
+                const adjustmentFactor = triangleArea / newTriangleArea;
+
+                bottomLeftCircle.style.left = newLeftX + (newLeftX - bottomLeftCircle.offsetLeft) * adjustmentFactor + "px";
             }
-        });
-
-        canvas.addEventListener('mouseup', () => {
-            draggingVertex = null;
-        });
-
-        drawTriangle();
+        }
     </script>
+
 </body>
 </html>
