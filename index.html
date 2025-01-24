@@ -3,178 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Triangle</title>
+    <title>Triangle Circles</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background-color: #f0f0f0;
-            overflow: hidden;
         }
         .container {
             position: relative;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
         }
         .circle {
             position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background-color: #3498db;
-            cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #4CAF50;
             color: white;
-            font-size: 10px;
-        }
-        .top { top: 0; left: 50%; transform: translateX(-50%); }
-        .bottom-left { bottom: 0; left: 30%; }
-        .bottom-right { bottom: 0; left: 70%; }
-        .label {
-            position: absolute;
             text-align: center;
-            font-size: 12px;
-            color: black;
+            font-size: 16px;
+        }
+        .circle-top {
+            top: 50px;
+            left: 250px;
+        }
+        .circle-bottom-left {
+            bottom: 50px;
+            left: 100px;
+        }
+        .circle-bottom-right {
+            bottom: 50px;
+            right: 100px;
+        }
+        .circle-top, .circle-bottom-left, .circle-bottom-right {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <div class="circle top" id="topCircle">
-            <div class="label">top vert</div>
+        <div id="circleTop" class="circle circle-top" onmousedown="startMove(event, 'top')">
+            Top
         </div>
-        <div class="circle bottom-left" id="bottomLeftCircle">
-            <div class="label">capex</div>
+        <div id="circleBottomLeft" class="circle circle-bottom-left" onmousedown="startMove(event, 'bottom-left')">
+            Bottom Left
         </div>
-        <div class="circle bottom-right" id="bottomRightCircle">
-            <div class="label">opex</div>
+        <div id="circleBottomRight" class="circle circle-bottom-right" onmousedown="startMove(event, 'bottom-right')">
+            Bottom Right
         </div>
     </div>
 
     <script>
-        const topCircle = document.getElementById("topCircle");
-        const bottomLeftCircle = document.getElementById("bottomLeftCircle");
-        const bottomRightCircle = document.getElementById("bottomRightCircle");
+        let isMoving = false;
+        let moveType = null;
+        let startX = 0;
+        let startY = 0;
+        let initialTopLeftX = 0;
+        let initialTopLeftY = 0;
+        let initialBottomLeftX = 0;
+        let initialBottomLeftY = 0;
+        let initialBottomRightX = 0;
+        let initialBottomRightY = 0;
 
-        let topCircleY = topCircle.offsetTop;
-        let bottomLeftX = bottomLeftCircle.offsetLeft;
-        let bottomRightX = bottomRightCircle.offsetLeft;
+        function startMove(e, type) {
+            isMoving = true;
+            moveType = type;
+            startX = e.clientX;
+            startY = e.clientY;
+            const topCircle = document.getElementById('circleTop');
+            const bottomLeftCircle = document.getElementById('circleBottomLeft');
+            const bottomRightCircle = document.getElementById('circleBottomRight');
+            
+            initialTopLeftX = topCircle.offsetLeft;
+            initialTopLeftY = topCircle.offsetTop;
+            initialBottomLeftX = bottomLeftCircle.offsetLeft;
+            initialBottomLeftY = bottomLeftCircle.offsetTop;
+            initialBottomRightX = bottomRightCircle.offsetLeft;
+            initialBottomRightY = bottomRightCircle.offsetTop;
 
-        // This function calculates the area of the triangle given its three vertices
-        function calculateTriangleArea() {
-            const x1 = bottomLeftX;
-            const y1 = bottomLeftCircle.offsetTop;
-            const x2 = bottomRightX;
-            const y2 = bottomRightCircle.offsetTop;
-            const x3 = topCircle.offsetLeft;
-            const y3 = topCircleY;
-            return Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2;
+            document.addEventListener('mousemove', moveCircle);
+            document.addEventListener('mouseup', stopMove);
         }
 
-        let isDraggingTop = false;
-        let isDraggingBottomLeft = false;
-        let isDraggingBottomRight = false;
+        function moveCircle(e) {
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            const topCircle = document.getElementById('circleTop');
+            const bottomLeftCircle = document.getElementById('circleBottomLeft');
+            const bottomRightCircle = document.getElementById('circleBottomRight');
 
-        // Start dragging events
-        topCircle.addEventListener("mousedown", (e) => {
-            isDraggingTop = true;
-            document.addEventListener("mousemove", onMouseMoveTop);
-        });
+            if (moveType === 'bottom-left') {
+                // Move bottom left circle horizontally
+                bottomLeftCircle.style.left = `${initialBottomLeftX + deltaX}px`;
 
-        bottomLeftCircle.addEventListener("mousedown", (e) => {
-            isDraggingBottomLeft = true;
-            document.addEventListener("mousemove", onMouseMoveBottomLeft);
-        });
+                // Move top circle vertically based on the left circle's movement
+                topCircle.style.top = `${initialTopLeftY + deltaY}px`;
 
-        bottomRightCircle.addEventListener("mousedown", (e) => {
-            isDraggingBottomRight = true;
-            document.addEventListener("mousemove", onMouseMoveBottomRight);
-        });
+                // Synchronize right bottom circle horizontally
+                bottomRightCircle.style.left = `${initialBottomRightX + deltaX}px`;
+            } else if (moveType === 'bottom-right') {
+                // Move bottom right circle horizontally
+                bottomRightCircle.style.left = `${initialBottomRightX + deltaX}px`;
 
-        document.addEventListener("mouseup", () => {
-            isDraggingTop = false;
-            isDraggingBottomLeft = false;
-            isDraggingBottomRight = false;
-            document.removeEventListener("mousemove", onMouseMoveTop);
-            document.removeEventListener("mousemove", onMouseMoveBottomLeft);
-            document.removeEventListener("mousemove", onMouseMoveBottomRight);
-        });
+                // Synchronize left bottom circle horizontally
+                bottomLeftCircle.style.left = `${initialBottomLeftX + deltaX}px`;
+            } else if (moveType === 'top') {
+                // Move top circle vertically
+                topCircle.style.top = `${initialTopLeftY + deltaY}px`;
 
-        // When the top vertex is moved, adjust the bottom vertices to preserve the area
-        function onMouseMoveTop(e) {
-            if (isDraggingTop) {
-                const containerRect = document.querySelector(".container").getBoundingClientRect();
-                let newTopY = e.clientY - containerRect.top;
-
-                // Get the initial area of the triangle
-                const originalArea = calculateTriangleArea();
-
-                // Update the top vertex position
-                topCircleY = newTopY;
-                topCircle.style.top = newTopY + "px";
-
-                // Calculate the new area
-                const newArea = calculateTriangleArea();
-                const scale = originalArea / newArea;
-
-                // Adjust the bottom-left and bottom-right vertices based on the scaling factor
-                bottomLeftCircle.style.left = (bottomLeftX * scale) + "px";
-                bottomRightCircle.style.left = (bottomRightX * scale) + "px";
+                // Move bottom circles horizontally based on the top circle's movement
+                bottomLeftCircle.style.left = `${initialBottomLeftX - deltaX}px`;
+                bottomRightCircle.style.left = `${initialBottomRightX + deltaX}px`;
             }
         }
 
-        // When the bottom-left vertex is moved, adjust the top vertex to preserve the area
-        function onMouseMoveBottomLeft(e) {
-            if (isDraggingBottomLeft) {
-                const containerRect = document.querySelector(".container").getBoundingClientRect();
-                let newLeftX = e.clientX - containerRect.left;
-
-                // Get the initial area of the triangle
-                const originalArea = calculateTriangleArea();
-
-                // Update the bottom-left vertex position
-                bottomLeftX = newLeftX;
-                bottomLeftCircle.style.left = newLeftX + "px";
-
-                // Calculate the new area
-                const newArea = calculateTriangleArea();
-                const scale = originalArea / newArea;
-
-                // Adjust the top vertex position vertically to keep the area constant
-                topCircleY = topCircleY * scale;
-                topCircle.style.top = topCircleY + "px";
-            }
-        }
-
-        // When the bottom-right vertex is moved, adjust the bottom-left vertex to preserve the area
-        function onMouseMoveBottomRight(e) {
-            if (isDraggingBottomRight) {
-                const containerRect = document.querySelector(".container").getBoundingClientRect();
-                let newRightX = e.clientX - containerRect.left;
-
-                // Get the initial area of the triangle
-                const originalArea = calculateTriangleArea();
-
-                // Update the bottom-right vertex position
-                bottomRightX = newRightX;
-                bottomRightCircle.style.left = newRightX + "px";
-
-                // Calculate the new area
-                const newArea = calculateTriangleArea();
-                const scale = originalArea / newArea;
-
-                // Adjust the bottom-left position to keep the area constant
-                bottomLeftCircle.style.left = (bottomLeftX * scale) + "px";
-            }
+        function stopMove() {
+            isMoving = false;
+            document.removeEventListener('mousemove', moveCircle);
+            document.removeEventListener('mouseup', stopMove);
         }
     </script>
-
 </body>
 </html>
