@@ -58,6 +58,7 @@
                 const base = Math.abs(B.x - A.x);
                 const height = (2 * fixedArea) / base;
                 vertices[0].x = B.x - base; // Adjust bottom left vertex horizontally
+                vertices[2].y = A.y - height; // Adjust top vertex to maintain height
             } else if (draggedIndex === 2) {
                 // Top vertex dragged, adjust bottom vertices symmetrically
                 const base = Math.abs(B.x - A.x);
