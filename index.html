@@ -123,10 +123,9 @@
                 const currentArea = calculateTriangleArea();
                 const scale = originalArea / currentArea;
 
-                // Adjust the bottom vertices to keep the area constant
-                const deltaX = bottomRightX - bottomLeftX;
-                bottomLeftCircle.style.left = (bottomLeftX + deltaX * (1 - scale)) + "px";
-                bottomRightCircle.style.left = (bottomRightX - deltaX * (1 - scale)) + "px";
+                // Adjust the bottom-left and bottom-right vertices to preserve the area
+                bottomLeftCircle.style.left = (bottomLeftX * scale) + "px";
+                bottomRightCircle.style.left = (bottomRightX * scale) + "px";
             }
         }
 
@@ -162,11 +161,12 @@
                 bottomRightX = newRightX;
                 bottomRightCircle.style.left = newRightX + "px";
 
-                // Adjust bottom-left position to keep the area constant
+                // Adjust bottom-left position to preserve the area
                 const currentArea = calculateTriangleArea();
                 const scale = originalArea / currentArea;
 
-                bottomLeftCircle.style.left = (bottomLeftX + (bottomLeftX - bottomRightX) * (1 - scale)) + "px";
+                // Adjust bottom-left circle's position
+                bottomLeftCircle.style.left = (bottomLeftX * scale) + "px";
             }
         }
     </script>
