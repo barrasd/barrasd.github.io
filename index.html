@@ -126,7 +126,7 @@
                 opex.cx.baseVal.value = newX;
                 opexText.setAttribute("x", newX);
 
-                qos.cy.baseVal.value += deltaX; // Move QoS vertically
+                qos.cy.baseVal.value -= deltaX; // Move QoS vertically (up when Opex moves right, down when Opex moves left)
                 qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
                 qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
 
