@@ -191,11 +191,11 @@
                     automation.cx.baseVal.value = newX;
                     automationText.setAttribute("x", newX);
 
-                    qos.cy.baseVal.value -= deltaX; // Move QoS vertically
+                    qos.cy.baseVal.value -= deltaX; // Move Automation vertically
                     qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
                     qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
 
-                    opex.cx.baseVal.value += deltaX; // Move Opex horizontally
+                    opex.cx.baseVal.value -= deltaX; // Move Opex horizontally in the opposite direction
                     opexText.setAttribute("x", opex.cx.baseVal.value);
                 }
                 updateLines();
