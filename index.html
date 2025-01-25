@@ -80,6 +80,8 @@
 
         const qosTextLine1 = document.getElementById("qos-text-line1");
         const qosTextLine2 = document.getElementById("qos-text-line2");
+        const qosPlus = document.getElementById("qos-plus");
+        const qosMinus = document.getElementById("qos-minus");
         const opexText = document.getElementById("opex-text");
         const automationText = document.getElementById("automation-text");
 
@@ -106,6 +108,10 @@
             qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
             qosTextLine2.setAttribute("x", qos.cx.baseVal.value);
             qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
+            qosPlus.setAttribute("x", qos.cx.baseVal.value);
+            qosPlus.setAttribute("y", qos.cy.baseVal.value - 30);
+            qosMinus.setAttribute("x", qos.cx.baseVal.value);
+            qosMinus.setAttribute("y", qos.cy.baseVal.value + 30);
 
             opex.cx.baseVal.value = centerX - triangleBaseHalf;
             opex.cy.baseVal.value = centerY + triangleHeight / 2;
@@ -161,6 +167,8 @@
                     qos.cy.baseVal.value -= deltaX; // Move QoS vertically (up when Opex moves right, down when Opex moves left)
                     qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
                     qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
+                    qosPlus.setAttribute("y", qos.cy.baseVal.value - 30);
+                    qosMinus.setAttribute("y", qos.cy.baseVal.value + 30);
                 }
                 updateLines();
             }
@@ -186,6 +194,8 @@
                     qos.cy.baseVal.value -= deltaX; // Move QoS vertically
                     qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
                     qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
+                    qosPlus.setAttribute("y", qos.cy.baseVal.value - 30);
+                    qosMinus.setAttribute("y", qos.cy.baseVal.value + 30);
 
                 } else if (currentScenario === "C") {
                     const deltaX = newX - automation.cx.baseVal.value;
@@ -196,6 +206,8 @@
                     qos.cy.baseVal.value -= deltaX; // Move Automation vertically
                     qosTextLine1.setAttribute("y", qos.cy.baseVal.value - 10);
                     qosTextLine2.setAttribute("y", qos.cy.baseVal.value + 10);
+                    qosPlus.setAttribute("y", qos.cy.baseVal.value - 30);
+                    qosMinus.setAttribute("y", qos.cy.baseVal.value + 30);
 
                     opex.cx.baseVal.value -= deltaX; // Move Opex horizontally in the opposite direction
                     opexText.setAttribute("x", opex.cx.baseVal.value);
@@ -210,6 +222,8 @@
                     qos.cy.baseVal.value = newY;
                     qosTextLine1.setAttribute("y", newY - 10);
                     qosTextLine2.setAttribute("y", newY + 10);
+                    qosPlus.setAttribute("y", newY - 30);
+                    qosMinus.setAttribute("y", newY + 30);
                 }
                 updateLines();
             }
